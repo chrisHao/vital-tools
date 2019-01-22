@@ -7,6 +7,8 @@
    The MIT License (MIT) (c) 2014 Jared Lunde
 
 """
+import UserDict
+import UserList
 import os
 import re
 import gc
@@ -19,6 +21,9 @@ import random
 import inspect
 import warnings
 import importlib
+from UserString import UserString
+
+
 _random = random.SystemRandom()
 try:
     import numpy as np
@@ -337,11 +342,11 @@ def table_mapping(data, padding=1, separator=" "):
     return ""
 
 
-def gen_rand_str(*size, use=None, keyspace=None):
+def gen_rand_str(size, use=None, keyspace=None):
     """ Generates a random string using random module specified in @use within
         the @keyspace
 
-        @*size: #int size range for the length of the string
+        @size: #int size range for the length of the string
         @use: the random module to use
         @keyspace: #str chars allowed in the random string
         ..
@@ -370,11 +375,11 @@ def gen_rand_str(*size, use=None, keyspace=None):
         for _ in range(use.randint(*size)))
 
 
-def rand_readable(*size, use=None, density=6):
+def rand_readable(size, use=None, density=6):
     """ Generates a random string with readable characters using
         random module specified in @use
 
-        @*size: #int size range for the length of the string
+        @size: #int size range for the length of the string
         @use: the random module to use
         @density: how often to include a vowel, you can expect a vowel about
             once every (density) nth character
@@ -580,11 +585,11 @@ def format_obj_name(obj, delim="<>"):
     return "{}{}".format(get_obj_name(obj), pname)
 
 
-def preprX(*attributes, address=True, full_name=False,
+def preprX(attributes, address=True, full_name=False,
            pretty=False, keyless=False, **kwargs):
     """ `Creates prettier object representations`
 
-        @*attributes: (#str) instance attributes within the object you
+        @attributes: (#str) instance attributes within the object you
             wish to display. Attributes can be recursive
             e.g. |one.two.three| for access to |self.one.two.three|
         @address: (#bool) |True| to include the memory address
@@ -640,7 +645,7 @@ class prepr(UserString):
         'obj', 'data', 'options', 'outputs', 'line_break',
         'supplemental', 'hex', 'pretty', '_no_keys')
 
-    def __init__(self, *attrs, _self=None, _break=False, _doc=False,
+    def __init__(self, attrs, _self=None, _break=False, _doc=False,
                  _address=True, _pretty=False, _full_name=False,
                  _no_keys=False, **kwattrs):
         self.obj = _self
@@ -672,7 +677,7 @@ class prepr(UserString):
     def __len__(self):
         return len(uncolorize(self.data))
 
-    def add_attrs(self, *args, _order=[], **kwargs):
+    def add_attrs(self, args, _order=[], **kwargs):
         """ Adds attributes to the __repr__ string
             @order: optional #list containing order to display kwargs
         """
@@ -1493,7 +1498,7 @@ class Logg(object):
         'x': set(),
     }
 
-    def __init__(self, *messages, loglevel=None, include_time=False,
+    def __init__(self, messages, loglevel=None, include_time=False,
                  pretty=False):
         """ A logger that also pretty prints
 
@@ -1921,7 +1926,7 @@ class ProgressBar(object):
         bar = "".join([" " for x in range(pr-1)] + ["↦"])
         subprogress = self.format_parent_bar() if self.parent_bar else ""
         fin = "Loading{} ={}{} ({}%)".format(subprogress, bar, "ӿ", pct)
-        print(fin.ljust(len(fin)+5), end="\r")
+        print(fin.ljust(len(fin)+5), "\r")
         time.sleep(0.10)
         print("\033[K\033[1A")
         self.progress = 0
@@ -1936,7 +1941,7 @@ class ProgressBar(object):
         if self.visible:
             if self.progress % self._mod == 1 or\
                self.progress == self.size - 1:
-                print(self.format_bar(), end="\r")
+                print(self.format_bar(), "\r")
             if self.progress == (self.size):
                 self.finish()
 
@@ -1992,7 +1997,7 @@ class Timer(object):
         '_callable', '_array', '_array_len', 'precision', 'progress',
         '_intervals_len', 'allocated_memory')
 
-    def __init__(self, callable=None, *args, _precision=8, _start=0.0,
+    def __init__(self, callable=None, args=None, _precision=8, _start=0.0,
                  _parent_progressbar=None, **kwargs):
         """ `Timer`
 
@@ -2112,7 +2117,7 @@ class Timer(object):
         self._start = time.perf_counter()
         return self.format_time(interval)
 
-    def time(self, intervals=1, *args, _show_progress=True, _print=True,
+    def time(self, intervals=1, args=None, _show_progress=True, _print=True,
              _collect_garbage=True, _quiet=True, **kwargs):
         """ Measures the execution time of :prop:_callable for @intervals
 
@@ -2267,7 +2272,7 @@ class Compare(object):
         '_callables', '_callable_results', 'precision', 'verbose',
         'progress', 'name', 'num_intervals')
 
-    def __init__(self, *callables, precision=8, name=None, verbose=False):
+    def __init__(self, callables, precision=8, name=None, verbose=False):
         """ A memory-efficient, performant and accurate tool to compare the
             execution times of given @callables
 
@@ -2316,7 +2321,7 @@ class Compare(object):
         """ Adds one or several @callables to the next timing """
         self._callables.extend(callables)
 
-    def time(self, intervals=1, *args, _show_progress=True, _print=True,
+    def time(self, intervals=1, args=None, _show_progress=True, _print=True,
              _collect_garbage=False, **kwargs):
         """ Measures the execution time of :prop:_callables for @intervals
 

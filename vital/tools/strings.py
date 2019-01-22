@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 """
 
    `Vital String Tools`
@@ -193,7 +194,12 @@ except re.error:
         u']+)')
     hashtag_re_pattern = \
         u'(?:^|[^#\w\@]*)#' + hashtag_pattern + u'(\b|$)?'
-    hashtag_re = re.compile(hashtag_re_pattern, re.UNICODE | re.M)
+    print hashtag_pattern
+    try:
+        hashtag_re = re.compile(hashtag_re_pattern, re.UNICODE | re.M)
+    except:
+        pass
+
 
 
 def get_hashtags(s):

@@ -324,7 +324,7 @@ class _pickle:
         return pickle.dump(data, self.protocol)
 
     def load(self, data):
-        return pickle.load(dataa, encoding="utf-8")
+        return pickle.load(data, encoding="utf-8")
 
 
 sweet_pickle = _pickle(3)

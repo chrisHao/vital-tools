@@ -7,6 +7,7 @@
 
 """
 import importlib
+import inspect
 from pydoc import locate, ErrorDuringImport
 
 from vital.tools.dicts import *

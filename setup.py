@@ -2,8 +2,10 @@
 import os
 import sys
 import uuid
+
+import pip
 from setuptools import setup
-from pip.req import parse_requirements
+# from pip.req import parse_requirements
 from pkgutil import walk_packages
 
 
@@ -23,8 +25,9 @@ pathname = os.path.dirname(os.path.realpath(__file__))
 
 
 # parse_requirements() returns generator of pip.req.InstallRequirement objects
-install_reqs = parse_requirements(pathname + "/requirements.txt",
-                                  session=uuid.uuid1())
+# install_reqs = parse_requirements(pathname + "/requirements.txt",
+#                                  session=uuid.uuid1())
+#pip.main(['install','-r',pathname + 'requirements.txt'])
 
 
 def find_packages(prefix=""):
@@ -47,6 +50,6 @@ setup(
     author_email='jared.lunde@gmail.com',
     url='https://github.com/jaredlunde/vital-tools',
     license="MIT",
-    install_requires=[str(ir.req) for ir in install_reqs],
+    # install_requires=[str(ir.req) for ir in install_reqs],
     packages=list(find_packages(PKG))
 )
